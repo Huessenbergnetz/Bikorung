@@ -17,32 +17,23 @@
  */
 
 import QtQuick 2.6
-import Sailfish.Silica 1.0
 
-Page {
-    id: mainPage
+ListModel {
+    id: contModel
+    ListElement {
+        name: "Matthias Fehring (Buschmann)"
+        role: ""
+        section: ""
+        website: "https://www.buschmann23.de"
+        twitter: "buschmann23"
+        github: "buschmann23"
+    }
 
-    allowedOrientations: Orientation.All
-
-    SilicaListView {
-        id: mainPageView
-        anchors.fill: parent
-
-        PullDownMenu {
-            flickable: mainPageView
-            MenuItem {
-                //: Pull down menu entry and page header
-                //% "About"
-                text: qsTrId("bikorung-about")
-                onClicked: pageStack.push(Qt.resolvedUrl("About.qml"))
-            }
-        }
-
-        VerticalScrollDecorator { flickable: mainPageView; page: mainPage }
-
-        header: PageHeader {
-            page: mainPage
-            title: "Bikorung"
-        }
+    Component.onCompleted: {
+        //% "Main developer, Bikorung creator"
+        contModel.get(0).role = qsTrId("intfuorit-author-role")
+        //% "Author"
+        contModel.get(0).section = qsTrId("Intfuorit-author-section")
     }
 }
+

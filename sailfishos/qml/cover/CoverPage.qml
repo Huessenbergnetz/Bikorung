@@ -24,5 +24,6 @@ CoverBackground {
 
     CoverPlaceholder {
         text: "Bikorung"
+        icon.source: appLauncherIcon
     }
 }

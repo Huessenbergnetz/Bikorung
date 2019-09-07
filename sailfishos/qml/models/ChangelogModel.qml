@@ -17,32 +17,22 @@
  */
 
 import QtQuick 2.6
-import Sailfish.Silica 1.0
 
-Page {
-    id: mainPage
+/*
+  Types:
+  0 - New
+  1 - Improved/Enhanced
+  2 - Fixed
+  3 - Note
+*/
 
-    allowedOrientations: Orientation.All
-
-    SilicaListView {
-        id: mainPageView
-        anchors.fill: parent
-
-        PullDownMenu {
-            flickable: mainPageView
-            MenuItem {
-                //: Pull down menu entry and page header
-                //% "About"
-                text: qsTrId("bikorung-about")
-                onClicked: pageStack.push(Qt.resolvedUrl("About.qml"))
-            }
-        }
-
-        VerticalScrollDecorator { flickable: mainPageView; page: mainPage }
-
-        header: PageHeader {
-            page: mainPage
-            title: "Bikorung"
-        }
+ListModel {
+    ListElement {
+        version: "1.0.0"
+        date: 1506692990000
+        entries: [
+            ListElement { type: 3; issue: ""; description: "first released version" }
+        ]
     }
 }
+

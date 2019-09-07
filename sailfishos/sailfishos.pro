@@ -39,11 +39,21 @@ PKGCONFIG += openssl
     INCLUDEPATH += /usr/include/nemonotifications-qt5
 }
 
-SOURCES += src/main.cpp
+SOURCES += \
+    src/main.cpp \
+    src/licensesmodel.cpp \
+    src/languagesmodel.cpp
+
+HEADERS += \
+    src/licensesmodel.h \
+    src/languagesmodel.h
 
 DISTFILES += qml/harbour-bikorung.qml \
     qml/cover/CoverPage.qml \
     qml/pages/MainPage.qml \
+    qml/pages/About.qml \
+    qml/models/ChangelogModel.qml \
+    qml/models/ContributorsModel.qml \
     rpm/harbour-bikorung.changes \
     rpm/harbour-bikorung.spec \
     rpm/harbour-bikorung.yaml \
@@ -64,3 +74,4 @@ icons.path = /usr/share/$$TARGET/icons
 icons.files = icons/z*
 INSTALLS += icons
 
+include(../HBN_SFOS_Components/HBN_SFOS_Components.pri)

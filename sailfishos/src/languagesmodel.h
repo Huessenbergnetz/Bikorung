@@ -16,33 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.6
-import Sailfish.Silica 1.0
+#ifndef LANGUAGESMODEL_H
+#define LANGUAGESMODEL_H
 
-Page {
-    id: mainPage
+#include "hbnsclanguagemodel.h"
 
-    allowedOrientations: Orientation.All
+class LanguagesModel : public Hbnsc::LanguageModel
+{
+    Q_OBJECT
+    Q_DISABLE_COPY(LanguagesModel)
+public:
+    explicit LanguagesModel(QObject *parent = nullptr);
+    ~LanguagesModel() override;
+};
 
-    SilicaListView {
-        id: mainPageView
-        anchors.fill: parent
-
-        PullDownMenu {
-            flickable: mainPageView
-            MenuItem {
-                //: Pull down menu entry and page header
-                //% "About"
-                text: qsTrId("bikorung-about")
-                onClicked: pageStack.push(Qt.resolvedUrl("About.qml"))
-            }
-        }
-
-        VerticalScrollDecorator { flickable: mainPageView; page: mainPage }
-
-        header: PageHeader {
-            page: mainPage
-            title: "Bikorung"
-        }
-    }
-}
+#endif // LANGUAGESMODEL_H

@@ -33,6 +33,11 @@
 #include <sailfishapp.h>
 #endif
 
+#include "hbnsc.h"
+#include "hbnsciconprovider.h"
+#include "licensesmodel.h"
+#include "languagesmodel.h"
+
 int main(int argc, char *argv[])
 {
 #ifndef CLAZY
@@ -49,7 +54,7 @@ int main(int argc, char *argv[])
         qDebug("Loading translations from %s", TRANSLATIONS_DIR);
         const QLocale locale;
 
-        for (const QString &name : {QStringLiteral("bikorung")}) {
+        for (const QString &name : {QStringLiteral("bikorung"), QStringLiteral("hbnsc")}) {
             auto trans = new QTranslator(app.get());
             if (Q_LIKELY(trans->load(locale, name, QStringLiteral("_"), QStringLiteral(TRANSLATIONS_DIR), QStringLiteral(".qm")))) {
                 if (Q_UNLIKELY(!app->installTranslator(trans))) {
@@ -61,11 +66,18 @@ int main(int argc, char *argv[])
         }
     }
 
+    qmlRegisterType<LanguagesModel>("harbour.intfuorit", 1, 0, "LanguageModel");
+    qmlRegisterType<LicensesModel>("harbour.intfuorit", 1, 0, "LicensesModel");
+
 #ifndef CLAZY
     std::unique_ptr<QQuickView> view(SailfishApp::createView());
 #else
     auto view = std::make_unique<QQuickView>();
 #endif
+
+    auto hbnscIconProvider = Hbnsc::HbnscIconProvider::createProvider(view->engine());
+
+    view->rootContext()->setContextProperty(QStringLiteral("appLauncherIcon"), Hbnsc::getLauncherIcon({86,108,128,150,172}));
 
 #ifndef CLAZY
     view->setSource(SailfishApp::pathToMainQml());
