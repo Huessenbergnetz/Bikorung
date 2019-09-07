@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.com
+
+[bikorung.main]
+file_filter = translations/bikorung_<lang>.ts
+source_file = translations/bikorung.ts
+source_lang = en
+type = QT
+
