@@ -18,6 +18,7 @@
 
 import QtQuick 2.6
 import Sailfish.Silica 1.0
+import harbour.bikorung 1.0
 
 Page {
     id: mainPage
@@ -26,7 +27,8 @@ Page {
 
     SilicaListView {
         id: mainPageView
-        anchors.fill: parent
+        anchors { fill: parent; bottomMargin: errorPanel.visibleSize }
+        clip: errorPanel.expanded
 
         PullDownMenu {
             flickable: mainPageView
@@ -36,6 +38,12 @@ Page {
                 text: qsTrId("bikorung-about")
                 onClicked: pageStack.push(Qt.resolvedUrl("About.qml"))
             }
+            MenuItem {
+                //: Pull down menu enty and page hader
+                //% "Add server"
+                text: qsTrId("bikorung-add-server")
+                onClicked: pageStack.push(Qt.resolvedUrl("../dialogs/AddEditServer.qml"))
+            }
         }
 
         VerticalScrollDecorator { flickable: mainPageView; page: mainPage }
@@ -43,6 +51,95 @@ Page {
         header: PageHeader {
             page: mainPage
             title: "Bikorung"
+        }
+
+        model: servers
+
+        delegate: ListItem {
+            id: serverItem
+            contentHeight: Theme.itemSizeMedium
+            ListView.onRemove: animateRemoval(serverItem)
+            menu: serverItemMenu
+
+            function remove() {
+                //: title for a remorse action to delete a server
+                //% "Deleting"
+                remorseAction(qsTrId("bikorung-remorse-delete-server"), function() { mainPageView.model.deleteServer(index) })
+            }
+
+            function edit() {
+                pageStack.push(Qt.resolvedUrl("../dialogs/AddEditServer.qml"), {server: model.item})
+            }
+
+            Label {
+                id: serverItemName
+                anchors { left: parent.left; right: parent.right; leftMargin: Theme.horizontalPageMargin; rightMargin: Theme.horizontalPageMargin }
+                text: model.item.name
+                color: serverItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+                truncationMode: TruncationMode.Fade
+            }
+
+            Text {
+                anchors { left: parent.left; right: parent.right; leftMargin: Theme.horizontalPageMargin; rightMargin: Theme.horizontalPageMargin; top: serverItemName.bottom }
+                //% "Never checked"
+                text: qsTrId("bikorung-server-never-checked")
+                color: serverItem.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+                font.pixelSize: Theme.fontSizeSmall
+                visible: model.item.lastResult === Server.NeverChecked
+            }
+
+            Text {
+                anchors { left: parent.left; right: parent.right; leftMargin: Theme.horizontalPageMargin; rightMargin: Theme.horizontalPageMargin; top: serverItemName.bottom }
+                text: model.item.lastCheck.toLocaleString(Qt.locale(), Locale.ShortFormat)
+                color: serverItem.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+                font.pixelSize: Theme.fontSizeSmall
+                visible: model.item.lastResult !== Server.NeverChecked
+            }
+
+            Component {
+                id: serverItemMenu
+                ContextMenu {
+                    MenuItem {
+                        //: menu title to edit a server
+                        //% "Edit"
+                        text: qsTrId("bikorung-menu-edit-server")
+                        onClicked: edit()
+                    }
+                    MenuItem {
+                        //: menu title to delete a server
+                        //% "Delete"
+                        text: qsTrId("bikorung-menu-delete-server")
+                        onClicked: remove()
+                    }
+                }
+            }
+        }
+    }
+
+    DockedPanel {
+        id: errorPanel
+        modal: true
+        width: parent.width
+        height: Theme.itemSizeExtraLarge + Theme.paddingLarge
+
+        Text {
+            id: errorText
+            text: servers.lastErrorString
+            anchors { left: parent.left; right: parent.right; top: parent.top; leftMargin: Theme.horizontalPageMargin; rightMargin: Theme.horizontalPageMargin; topMargin: Theme.paddingLarge }
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            color: Theme.primaryColor
+            font.pixelSize: Theme.fontSizeSmall
+        }
+    }
+
+    Connections {
+        target: servers
+        onLastErrorChanged: {
+            if (servers.lastError === ServerModel.NoError) {
+                errorPanel.hide();
+            } else {
+                errorPanel.show();
+            }
         }
     }
 }

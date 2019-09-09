@@ -37,6 +37,9 @@
 #include "hbnsciconprovider.h"
 #include "licensesmodel.h"
 #include "languagesmodel.h"
+#include "servermodel.h"
+#include "serverfiltermodel.h"
+#include "server.h"
 
 int main(int argc, char *argv[])
 {
@@ -53,6 +56,7 @@ int main(int argc, char *argv[])
     {
         qDebug("Loading translations from %s", TRANSLATIONS_DIR);
         const QLocale locale;
+        qDebug("Detected locale: %s", qUtf8Printable(locale.name()));
 
         for (const QString &name : {QStringLiteral("bikorung"), QStringLiteral("hbnsc")}) {
             auto trans = new QTranslator(app.get());
@@ -66,8 +70,11 @@ int main(int argc, char *argv[])
         }
     }
 
-    qmlRegisterType<LanguagesModel>("harbour.intfuorit", 1, 0, "LanguageModel");
-    qmlRegisterType<LicensesModel>("harbour.intfuorit", 1, 0, "LicensesModel");
+    qmlRegisterType<LanguagesModel>("harbour.bikorung", 1, 0, "LanguageModel");
+    qmlRegisterType<LicensesModel>("harbour.bikorung", 1, 0, "LicensesModel");
+    qmlRegisterType<Server>("harbour.bikorung", 1, 0, "Server");
+    qmlRegisterUncreatableType<ServerModel>("harbour.bikorung", 1, 0, "ServerModel", QStringLiteral("ServerModel is not a creatable type!"));
+    qmlRegisterUncreatableType<ServerFilterModel>("harbour.bikorung", 1, 0, "ServerFilterModel", QStringLiteral("ServerFilterModel is not a creatable type!"));
 
 #ifndef CLAZY
     std::unique_ptr<QQuickView> view(SailfishApp::createView());
@@ -77,7 +84,10 @@ int main(int argc, char *argv[])
 
     auto hbnscIconProvider = Hbnsc::HbnscIconProvider::createProvider(view->engine());
 
+    auto servers = new ServerFilterModel(app.get());
+
     view->rootContext()->setContextProperty(QStringLiteral("appLauncherIcon"), Hbnsc::getLauncherIcon({86,108,128,150,172}));
+    view->rootContext()->setContextProperty(QStringLiteral("servers"), servers);
 
 #ifndef CLAZY
     view->setSource(SailfishApp::pathToMainQml());

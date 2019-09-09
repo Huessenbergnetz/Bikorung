@@ -50,15 +50,19 @@ HEADERS += \
 
 DISTFILES += qml/harbour-bikorung.qml \
     qml/cover/CoverPage.qml \
+    qml/dialogs/AddEditServer.qml \
     qml/pages/MainPage.qml \
     qml/pages/About.qml \
     qml/models/ChangelogModel.qml \
     qml/models/ContributorsModel.qml \
+    qml/parts/TextFieldWithDesc.qml \
     rpm/harbour-bikorung.changes \
     rpm/harbour-bikorung.spec \
     rpm/harbour-bikorung.yaml \
     translations/*.ts \
     harbour-bikorung.desktop
+
+include(../common/common.pri)
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 150x150 172x172
 
