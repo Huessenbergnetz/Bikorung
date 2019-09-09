@@ -26,6 +26,8 @@ Dialog {
     property Server server
     canAccept: serverName.text.length > 0
 
+    allowedOrientations: Orientation.All
+
     onAccepted: {
         if (server) {
             server.update(serverName.text, hostName.text, ipv4.text, ipv6.text, notes.text);

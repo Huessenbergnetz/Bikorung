@@ -157,5 +157,15 @@
         <extracomment>error message when adding a server</extracomment>
         <translation type="unfinished"/>
     </message>
+    <message id="bikorung-settings">
+        <source>Settings</source>
+        <extracomment>Pull down menu entry and page header</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message id="bikorung-settings-section-display">
+        <source>Display</source>
+        <extracomment>Section header on the settings page</extracomment>
+        <translation type="unfinished"/>
+    </message>
 </context>
 </TS>

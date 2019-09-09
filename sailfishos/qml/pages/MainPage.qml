@@ -39,6 +39,12 @@ Page {
                 onClicked: pageStack.push(Qt.resolvedUrl("About.qml"))
             }
             MenuItem {
+                //: Pull down menu entry and page header
+                //% "Settings"
+                text: qsTrId("bikorung-settings")
+                onClicked: pageStack.push(Qt.resolvedUrl("Settings.qml"))
+            }
+            MenuItem {
                 //: Pull down menu enty and page hader
                 //% "Add server"
                 text: qsTrId("bikorung-add-server")

@@ -53,6 +53,7 @@ DISTFILES += qml/harbour-bikorung.qml \
     qml/dialogs/AddEditServer.qml \
     qml/pages/MainPage.qml \
     qml/pages/About.qml \
+    qml/pages/Settings.qml \
     qml/models/ChangelogModel.qml \
     qml/models/ContributorsModel.qml \
     qml/parts/TextFieldWithDesc.qml \

@@ -40,6 +40,7 @@
 #include "servermodel.h"
 #include "serverfiltermodel.h"
 #include "server.h"
+#include "configuration.h"
 
 int main(int argc, char *argv[])
 {
@@ -52,6 +53,12 @@ int main(int argc, char *argv[])
     app->setApplicationName(QStringLiteral("harbour-bikorung"));
     app->setApplicationDisplayName(QStringLiteral("Bikorung"));
     app->setApplicationVersion(QStringLiteral(VERSION_STRING));
+
+    auto config = new Configuration(app.get());
+
+    if (!config->language().isEmpty()) {
+        QLocale::setDefault(QLocale(config->language()));
+    }
 
     {
         qDebug("Loading translations from %s", TRANSLATIONS_DIR);
@@ -88,6 +95,7 @@ int main(int argc, char *argv[])
 
     view->rootContext()->setContextProperty(QStringLiteral("appLauncherIcon"), Hbnsc::getLauncherIcon({86,108,128,150,172}));
     view->rootContext()->setContextProperty(QStringLiteral("servers"), servers);
+    view->rootContext()->setContextProperty(QStringLiteral("config"), config);
 
 #ifndef CLAZY
     view->setSource(SailfishApp::pathToMainQml());
